@@ -16,20 +16,27 @@ def main():
     base_dir = "moss-archive/" + "/".join(sub_dirs)
     
     os.makedirs(base_dir, exist_ok=True)
+    
+    # remove stanford paths from all hyperlinks
+    main_page_content = main_page_content.replace(url + "/", "", -1)
 
     with open(base_dir + "/index.html", "w+") as file:
-        file.write(requests.get(url).text)
-        
-        
+        file.write(main_page_content)   
     
-    # print(f"Match 9: {download_match_page(links[9], base_dir)}")
-    for link in links:
-        download_match_page(link, base_dir)
-
-    
+    # limit to only top 30 results to comply with stanfords rate limits
+    # take top 30, every other link
+    for i in range(0,60, 2):
+        print(f"Archiving {links[i]}")
+        download_match_page(links[i], base_dir)
 
 
 def download_match_page(url: str, base_dir: str):
+    """
+    Downloads a match page from its url, including all sub pages
+    
+    url: the url of the match page
+    base_dir: the base directory to download it to 
+    """
 
     no_ext_link = url[:len(url) - 5]
     
@@ -46,6 +53,9 @@ def download_match_page(url: str, base_dir: str):
 
 
 def parse_args():
+    """
+    parses args from the archive.sh scripts
+    """
     if len(sys.argv) != 2:
         sys.exit(1)
     return sys.argv[1]
@@ -67,6 +77,9 @@ def get_stanford_links(main_page_content: str) -> List[str]:
 
 
 def get_ignorable_links() -> List[str]:
+    """
+    util for all the useless links on the index page
+    """
     return ["http://moss.stanford.edu/general/format.html",
             "http://moss.stanford.edu/general/tips.html",
             "http://moss.stanford.edu/general/faq.html",
