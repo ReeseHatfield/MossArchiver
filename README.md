@@ -1,6 +1,7 @@
 # MossArchiver
 
-A tool to archive [MOSS](https://theory.stanford.edu/~aiken/moss/) results
+A tool to archive [MOSS](https://theory.stanford.edu/~aiken/moss/) results.
+This tool will only archive the top 30 results, to comply with stanfords rate limit policies.
 
 ## Usage:
 ```bash
